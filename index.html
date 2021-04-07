@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
+    <title>Boolflix</title>
+</head>
+<body>
+    <div id="root">
+        <input @keyup.enter="getMovie" placeholder="Cerca film" v-model="searchMovie" type="text">
+        <button @click="getMovie"><i class="fas fa-search"></i></button>
+        <ul>
+            <li v-for="movie in listMovies">
+
+                <h2 v-if="movie.title">{{movie.title}}</h2>
+                <h2 else="movie.name">{{movie.name}}</h2>
+
+                <h3 v-if="movie.original_title">{{movie.original_title}}</h3>
+                <h3 else="movie.original_name">{{movie.original_name}}</h3>
+
+                <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" alt="">
+
+                <img :src="'https://www.unknown.nu/flags/images/' + movie.original_language + '-100'"  alt="">
+                <p v-else>{{movie.original_language}}</p>
+
+                <i v-for="n in movie.vote_average" class="fas fa-star"></i>
+                <i v-for="e in 5 - movie.vote_average" class="far fa-star"></i>
+            </li>
+        </ul>
+    </div>
+    <script src="js/script.js"></script>
+</body>
+</html>
