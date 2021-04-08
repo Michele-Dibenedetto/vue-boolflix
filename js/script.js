@@ -3,6 +3,7 @@ var app = new Vue({
     data: {
         searchMovie:"",
         listMovies: [],
+        flags: []
     },
     methods: {
         getMovie() {
@@ -12,8 +13,11 @@ var app = new Vue({
                 .then((result) => {
                     console.log(result);
                     var movies = result.data.results;
-                    // this.listMovies = this.listMovies.concat(result.data.results);
                     movies.forEach((movie) => {
+                        if (movie.original_language == "en") {
+                            movie.original_language = "gb";
+                        }
+                        movie.original_language = movie.original_language.toUpperCase()
                         movie.vote_average = Math.ceil(movie.vote_average / 2);
                         this.listMovies.push(movie);
                     })
@@ -24,16 +28,30 @@ var app = new Vue({
                 .then((res) => {
                     console.log(res);
                     var series = res.data.results;
-                    // this.listMovies = this.listMovies.concat(result.data.results);
                     series.forEach((serie) => {
+                        if (serie.original_language == "en") {
+                            serie.original_language = "gb";
+                        }
+                        serie.original_language = serie.original_language.toUpperCase()
                         serie.vote_average = Math.ceil(serie.vote_average / 2);
                         this.listMovies.push(serie);
                     })
-                    // this.listMovies = movies.concat(series)
                     console.log(this.listMovies);
                 })
             this.searchMovie = "";
          }
+    },
+    mounted: function() {
+        axios
+            .get("https://api.themoviedb.org/3/configuration/countries?api_key=7a64f0d1a4df162cd4dc8d041b52155b")
+            .then((result) => {
+                console.log(result.data);
+                var countries = result.data;
+                countries.forEach((country) => {
+                    this.flags.push(country.iso_3166_1)
+                })
+                console.log(this.flags);
+            })
     }
 })
 Vue.config.devtools = true;

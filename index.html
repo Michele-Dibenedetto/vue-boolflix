@@ -12,26 +12,51 @@
 </head>
 <body>
     <div id="root">
-        <input @keyup.enter="getMovie" placeholder="Cerca film" v-model="searchMovie" type="text">
-        <button @click="getMovie"><i class="fas fa-search"></i></button>
-        <ul>
-            <li v-for="movie in listMovies">
+        <header>
+            <div class="right">
+                <img class="logo" src="https://files.slack.com/files-pri/T91QPE3BP-F01TSFY12U9/boolflix.png" alt="logo_boolflix">
+                <ul class="nav">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Serie tv</a></li>
+                    <li><a href="#">Film</a></li>
+                    <li><a href="#">Originali</a></li>
+                    <li><a href="#">Aggiunti di recente</a></li>
+                    <li><a href="#">La mia lista</a></li>
+                </ul>
+            </div>
+            <div class="left">
+                <input @keyup.enter="getMovie" placeholder="Cerca film e serie tv" v-model="searchMovie" type="text">
+                <button @click="getMovie"><i class="fas fa-search"></i></button>
+            </div>
+        </header>
+        
+        <main>
+            <div class="list_results">
+                <div v-for="movie in listMovies" class="card">
+                    <img v-if="movie.poster_path != null " class="poster" :src="'https://image.tmdb.org/t/p/w342' + movie.poster_path" alt="img_poster">
+                    <img class="poster" v-else src="https://bitsofco.de/content/images/2018/12/broken-1.png" alt="">
+                    <div class="layover">
+                        <!-- TITOLO -->
+                        <p v-if="movie.title"><strong>Titolo: </strong>{{movie.title}}</p>
+                        <p else="movie.name"><strong>Titolo: </strong>{{movie.name}}</p>
 
-                <h2 v-if="movie.title">{{movie.title}}</h2>
-                <h2 else="movie.name">{{movie.name}}</h2>
+                        <!-- TITOLO ORIGINALE -->
+                        <p v-if="movie.original_title"><strong>Titolo originale: </strong>{{movie.original_title}}</p>
+                        <p else="movie.original_name"><strong>Titolo originale: </strong>{{movie.original_name}}</p>
 
-                <h3 v-if="movie.original_title">{{movie.original_title}}</h3>
-                <h3 else="movie.original_name">{{movie.original_name}}</h3>
+                        <!-- VOTO -->
+                        <span><strong>Voto: </strong></span>
+                        <i v-for="n in movie.vote_average" class="fas fa-star"></i>
+                        <i v-for="e in 5 - movie.vote_average" class="far fa-star"></i>
 
-                <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" alt="">
-
-                <img :src="'https://www.unknown.nu/flags/images/' + movie.original_language + '-100'"  alt="">
-                <p v-else>{{movie.original_language}}</p>
-
-                <i v-for="n in movie.vote_average" class="fas fa-star"></i>
-                <i v-for="e in 5 - movie.vote_average" class="far fa-star"></i>
-            </li>
-        </ul>
+                        <!-- OVERVIEW -->
+                        <p><strong>Overview: </strong>{{movie.overview}}</p>
+                    </div>
+                    <img class="language" v-if="flags.includes(movie.original_language)" :src="'https://www.countryflags.io/' + movie.original_language + '/shiny/64.png'"  alt="">
+                    <p class="language" v-else><strong>Lingua originale: </strong>{{movie.original_language}}</p>
+                </div>
+            </div>
+        </main>
     </div>
     <script src="js/script.js"></script>
 </body>
